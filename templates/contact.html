@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section">
+  <div class="container" style="max-width: 900px;">
+    <div class="text-center" style="margin-bottom: 48px;">
+      <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 16px;">Contact Us</h1>
+      <p style="font-size: 18px; color: var(--text-secondary);">We'd love to hear from you!</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 48px;">
+      <!-- Contact Information -->
+      <div class="card">
+        <div class="card-body" style="padding: 40px;">
+          <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">Get in Touch</h2>
+
+          <div style="margin-bottom: 24px;">
+            <div style="display: flex; align-items: start; gap: 16px; margin-bottom: 20px;">
+              <div style="width: 48px; height: 48px; background: rgba(37, 99, 235, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-envelope" style="font-size: 20px; color: var(--primary);"></i>
+              </div>
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 4px;">Email</h3>
+                <p style="color: var(--text-secondary);">support@shopnest.com</p>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: start; gap: 16px; margin-bottom: 20px;">
+              <div style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-phone" style="font-size: 20px; color: var(--success);"></i>
+              </div>
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 4px;">Phone</h3>
+                <p style="color: var(--text-secondary);">+91 1800-123-4567</p>
+                <p style="color: var(--text-muted); font-size: 13px;">Mon-Sat, 9 AM - 6 PM</p>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: start; gap: 16px;">
+              <div style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-map-marker-alt" style="font-size: 20px; color: var(--accent);"></i>
+              </div>
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 4px;">Address</h3>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                  123 Shopping Street,<br>
+                  Tech City, TC 560001<br>
+                  India
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--border); padding-top: 24px;">
+            <h3 style="font-weight: 600; margin-bottom: 12px;">Follow Us</h3>
+            <div style="display: flex; gap: 12px;">
+              <a href="#" class="btn btn-ghost btn-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="btn btn-ghost btn-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="btn btn-ghost btn-icon">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="btn btn-ghost btn-icon">
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="card">
+        <div class="card-body" style="padding: 40px;">
+          <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">Send us a Message</h2>
+
+          <form>
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" placeholder="Your name" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" placeholder="your@email.com" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <input type="text" class="form-control" placeholder="How can we help?" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" rows="5" placeholder="Your message..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              <i class="fas fa-paper-plane"></i>
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="card">
+      <div class="card-header">
+        <h2 style="font-size: 24px; font-weight: 700;">Frequently Asked Questions</h2>
+      </div>
+      <div class="card-body" style="padding: 32px;">
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-weight: 600; margin-bottom: 8px;">What are your shipping times?</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            We typically ship orders within 1-2 business days. Delivery takes 3-7 business days depending on your location.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-weight: 600; margin-bottom: 8px;">What is your return policy?</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            We offer a 30-day return policy on most items. Products must be unused and in original packaging.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-weight: 600; margin-bottom: 8px;">Do you ship internationally?</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            Currently, we only ship within India. International shipping will be available soon.
+          </p>
+        </div>
+
+        <div>
+          <h3 style="font-weight: 600; margin-bottom: 8px;">How can I track my order?</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            Once your order ships, you'll receive a tracking number via email. You can also track your orders from your account dashboard.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

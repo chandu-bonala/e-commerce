@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 32px; color: var(--text-secondary); font-size: 14px;">
+      <a href="{{ url_for('main.index') }}" style="color: var(--text-secondary);">Home</a>
+      <i class="fas fa-chevron-right" style="margin: 0 8px; font-size: 10px;"></i>
+      <a href="{{ url_for('products.list') }}" style="color: var(--text-secondary);">Products</a>
+      <i class="fas fa-chevron-right" style="margin: 0 8px; font-size: 10px;"></i>
+      <a href="{{ url_for('products.list', category=product.category_id) }}" style="color: var(--text-secondary);">{{ product.category.name }}</a>
+      <i class="fas fa-chevron-right" style="margin: 0 8px; font-size: 10px;"></i>
+      <span>{{ product.name }}</span>
+    </nav>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-bottom: 64px;">
+      <!-- Product Images -->
+      <div>
+        <div style="border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-secondary); margin-bottom: 16px;">
+          <img id="main-product-image"
+               src="{{ product.image or '/static/images/placeholder.jpg' }}"
+               alt="{{ product.name }}"
+               style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div>
+        <div style="display: inline-block; background: var(--bg-secondary); color: var(--primary); padding: 6px 12px; border-radius: var(--radius-md); font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 12px;">
+          {{ product.category.name }}
+        </div>
+
+        <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 16px; line-height: 1.3;">
+          {{ product.name }}
+        </h1>
+
+        <!-- Rating -->
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+          <div class="product-rating">
+            <div class="stars">
+              {% for i in range(5) %}
+                {% if i < product.rating %}
+                  <i class="fas fa-star"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <span class="rating-text">({{ product.reviews_count }} reviews)</span>
+          </div>
+
+          {% if product.stock > 0 %}
+          <span style="color: var(--success); font-weight: 600; font-size: 14px;">
+            <i class="fas fa-check-circle"></i> In Stock
+          </span>
+          {% else %}
+          <span style="color: var(--danger); font-weight: 600; font-size: 14px;">
+            <i class="fas fa-times-circle"></i> Out of Stock
+          </span>
+          {% endif %}
+        </div>
+
+        <!-- Price -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+            <span style="font-size: 40px; font-weight: 700; color: var(--primary);">₹{{ product.final_price }}</span>
+            {% if product.discount_price %}
+            <span style="font-size: 24px; color: var(--text-muted); text-decoration: line-through;">₹{{ product.price }}</span>
+            <span style="background: var(--danger); color: white; padding: 6px 12px; border-radius: var(--radius-md); font-weight: 600;">
+              {{ product.discount_percentage }}% OFF
+            </span>
+            {% endif %}
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px;">Inclusive of all taxes</p>
+        </div>
+
+        <!-- Description -->
+        <div style="margin-bottom: 32px;">
+          <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Product Description</h3>
+          <p style="color: var(--text-secondary); line-height: 1.8;">
+            {{ product.description or 'No description available.' }}
+          </p>
+        </div>
+
+        <!-- Quantity & Actions -->
+        <div style="border-top: 2px solid var(--border); padding-top: 24px; margin-bottom: 24px;">
+          {% if current_user.is_authenticated %}
+            {% if product.stock > 0 %}
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+              <div class="quantity-control">
+                <button class="quantity-btn" onclick="changeQuantity(-1)">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <input type="number" id="quantity-input" value="1" min="1" max="{{ product.stock }}"
+                       class="quantity-value" style="border: 2px solid var(--border); border-radius: var(--radius-md); padding: 8px; text-align: center; width: 80px;" readonly>
+                <button class="quantity-btn" onclick="changeQuantity(1)">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px;">
+              <button onclick="addToCartWithQuantity()" class="btn btn-primary btn-lg" style="flex: 1;">
+                <i class="fas fa-cart-plus"></i>
+                Add to Cart
+              </button>
+              <button class="btn btn-accent btn-lg" style="flex: 1;">
+                <i class="fas fa-bolt"></i>
+                Buy Now
+              </button>
+            </div>
+            {% else %}
+            <button class="btn btn-outline btn-lg btn-full" disabled>
+              <i class="fas fa-times-circle"></i>
+              Out of Stock
+            </button>
+            {% endif %}
+          {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg btn-full">
+            <i class="fas fa-sign-in-alt"></i>
+            Login to Buy
+          </a>
+          {% endif %}
+        </div>
+
+        <!-- Features -->
+        <div style="background: var(--bg-secondary); padding: 20px; border-radius: var(--radius-lg);">
+          <div style=" display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <i class="fas fa-shipping-fast" style="color: var(--primary); font-size: 20px;"></i>
+              <span style="font-size: 14px;">Free Delivery</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <i class="fas fa-undo-alt" style="color: var(--success); font-size: 20px;"></i>
+              <span style="font-size: 14px;">30-Day Returns</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <i class="fas fa-shield-alt" style="color: var(--accent); font-size: 20px;"></i>
+              <span style="font-size: 14px;">Secure Payment</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <i class="fas fa-award" style="color: var(--info); font-size: 20px;"></i>
+              <span style="font-size: 14px;">Quality Assured</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div style="margin-bottom: 64px;">
+      <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px;">Customer Reviews</h2>
+
+      {% if current_user.is_authenticated %}
+      <!-- Add Review Form -->
+      <form method="POST" action="{{ url_for('products.add_review', product_id=product.id) }}" class="card" style="margin-bottom: 32px;">
+        <div class="card-body">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Write a Review</h3>
+
+          <div class="form-group">
+            <label class="form-label">Rating</label>
+            <div style="display: flex; gap: 8px; font-size: 24px;">
+              {% for i in range(1, 6) %}
+              <i class="far fa-star rating-star" data-rating="{{ i }}" onclick="setRating({{ i }})" style="cursor: pointer; color: var(--text-muted);"></i>
+              {% endfor %}
+              <input type="hidden" name="rating" id="rating-input" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Review Title</label>
+            <input type="text" name="title" class="form-control" placeholder="Great product!">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Your Review</label>
+            <textarea name="comment" class="form-control" rows="4" placeholder="Tell us what you think about this product..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i>
+            Submit Review
+          </button>
+        </div>
+      </form>
+      {% endif %}
+
+      <!-- Reviews List -->
+      {% if reviews %}
+      <div class="grid grid-2" style="gap: 20px;">
+        {% for review in reviews %}
+        <div class="card">
+          <div class="card-body">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                  <div class="user-avatar" style="width: 40px; height: 40px;">{{ review.user.name[:2].upper() }}</div>
+                  <div>
+                    <p style="font-weight: 600;">{{ review.user.name }}</p>
+                    <p style="font-size: 12px; color: var(--text-muted);">{{ review.created_at.strftime('%B %d, %Y') }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="stars">
+                {% for i in range(review.rating) %}
+                <i class="fas fa-star"></i>
+                {% endfor %}
+              </div>
+            </div>
+
+            {% if review.title %}
+            <h4 style="font-weight: 600; margin-bottom: 8px;">{{ review.title }}</h4>
+            {% endif %}
+
+            {% if review.comment %}
+            <p style="color: var(--text-secondary); line-height: 1.7;">{{ review.comment }}</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="card">
+        <div class="card-body text-center">
+          <p style="color: var(--text-secondary);">No reviews yet. Be the first to review!</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div>
+      <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px;">You May Also Like</h2>
+
+      <div class="grid grid-4">
+        {% for related in related_products %}
+        <div class="product-card">
+          <a href="{{ url_for('products.detail', product_id=related.id) }}">
+            <div class="product-image">
+              <img src="{{ related.image or '/static/images/placeholder.jpg' }}" alt="{{ related.name }}">
+            </div>
+          </a>
+
+          <div class="product-info">
+            <p class="product-category">{{ related.category.name }}</p>
+            <h3 class="product-name">
+              <a href="{{ url_for('products.detail', product_id=related.id) }}">{{ related.name }}</a>
+            </h3>
+
+            <div class="product-price">
+              <span class="current-price">₹{{ related.final_price }}</span>
+            </div>
+
+            <div class="product-actions">
+              <button onclick="addToCart({{ related.id }})" class="btn btn-primary btn-full btn-sm">
+                <i class="fas fa-cart-plus"></i>
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // Quantity control
+  function changeQuantity(delta) {
+    const input = document.getElementById('quantity-input');
+    const currentValue = parseInt(input.value);
+    const newValue = currentValue + delta;
+    const max = parseInt(input.max);
+
+    if (newValue >= 1 && newValue <= max) {
+      input.value = newValue;
+    }
+  }
+
+  // Add to cart with quantity
+  function addToCartWithQuantity() {
+    const quantity = document.getElementById('quantity-input').value;
+    fetch('/cart/add/{{ product.id }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `quantity=${quantity}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showToast(data.message, 'success');
+        updateCartBadge(data.cart_count);
+      } else {
+        showToast(data.message, 'danger');
+      }
+    });
+  }
+
+  // Rating stars
+  function setRating(rating) {
+    document.getElementById('rating-input').value = rating;
+    const stars = document.querySelectorAll('.rating-star');
+    stars.forEach((star, index) => {
+      if (index < rating) {
+        star.classList.remove('far');
+        star.classList.add('fas');
+        star.style.color = 'var(--accent)';
+      } else {
+        star.classList.remove('fas');
+        star.classList.add('far');
+        star.style.color = 'var(--text-muted)';
+      }
+    });
+  }
+</script>
+
+{% endblock %}

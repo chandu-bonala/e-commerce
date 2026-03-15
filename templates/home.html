@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+
+{% block title %}ShopNest - Your One-Stop E-Commerce Store{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content animate-fade-in-up">
+      <h1>Welcome to ShopNest</h1>
+      <p>Discover amazing products at unbeatable prices. Shop the latest trends and enjoy fast, free delivery on orders above ₹500.</p>
+      <div class="hero-buttons">
+        <a href="{{ url_for('products.list') }}" class="btn btn-accent btn-lg">
+          <i class="fas fa-shopping-bag"></i>
+          Shop Now
+        </a>
+        <a href="#featured" class="btn btn-outline btn-lg" style="color: white; border-color: white;">
+          <i class="fas fa-star"></i>
+          Featured Products
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Browse our wide range of product categories</p>
+    </div>
+
+    <div class="grid grid-4">
+      {% for category in categories %}
+      <a href="{{ url_for('products.list', category=category.id) }}" class="category-card animate-on-scroll">
+        <div class="category-icon">
+          <i class="fas {{ category.icon or 'fa-box' }}"></i>
+        </div>
+        <h3 class="category-name">{{ category.name }}</h3>
+        <p class="category-count">{{ category.products|length }} products</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="section" id="featured" style="background: var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Products</h2>
+      <p class="section-subtitle">Handpicked products just for you</p>
+    </div>
+
+    <div class="grid grid-4">
+      {% for product in featured_products %}
+      <div class="product-card animate-on-scroll">
+        <a href="{{ url_for('products.detail', product_id=product.id) }}">
+          <div class="product-image">
+            {% if product.is_featured %}
+            <span class="product-badge">Featured</span>
+            {% endif %}
+            <img src="{{ product.image or '/static/images/placeholder.jpg' }}" alt="{{ product.name }}">
+          </div>
+        </a>
+
+        <div class="product-info">
+          <p class="product-category">{{ product.category.name }}</p>
+          <h3 class="product-name">
+            <a href="{{ url_for('products.detail', product_id=product.id) }}">{{ product.name }}</a>
+          </h3>
+
+          <div class="product-rating">
+            <div class="stars">
+              {% for i in range(5) %}
+                {% if i < product.rating %}
+                  <i class="fas fa-star"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <span class="rating-text">({{ product.reviews_count }})</span>
+          </div>
+
+          <div class="product-price">
+            <span class="current-price">₹{{ product.final_price }}</span>
+            {% if product.discount_price %}
+            <span class="original-price">₹{{ product.price }}</span>
+            {% endif %}
+          </div>
+
+          <div class="product-actions">
+            <button onclick="addToCart({{ product.id }})" class="btn btn-primary btn-full">
+              <i class="fas fa-cart-plus"></i>
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center" style="margin-top: 48px;">
+      <a href="{{ url_for('products.list') }}" class="btn btn-primary btn-lg">
+        View All Products
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Today's Deals Section -->
+{% if deal_products %}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Today's Hot Deals</h2>
+      <p class="section-subtitle">Limited time offers - grab them before they're gone!</p>
+    </div>
+
+    <div class="grid grid-4">
+      {% for product in deal_products %}
+      <div class="product-card animate-on-scroll">
+        <a href="{{ url_for('products.detail', product_id=product.id) }}">
+          <div class="product-image">
+            <span class="product-badge sale">{{ product.discount_percentage }}% OFF</span>
+            <img src="{{ product.image or '/static/images/placeholder.jpg' }}" alt="{{ product.name }}">
+          </div>
+        </a>
+
+        <div class="product-info">
+          <p class="product-category">{{ product.category.name }}</p>
+          <h3 class="product-name">
+            <a href="{{ url_for('products.detail', product_id=product.id) }}">{{ product.name }}</a>
+          </h3>
+
+          <div class="product-rating">
+            <div class="stars">
+              {% for i in range(5) %}
+                {% if i < product.rating %}
+                  <i class="fas fa-star"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <span class="rating-text">({{ product.reviews_count }})</span>
+          </div>
+
+          <div class="product-price">
+            <span class="current-price">₹{{ product.final_price }}</span>
+            <span class="original-price">₹{{ product.price }}</span>
+          </div>
+
+          <div class="product-actions">
+            <button onclick="addToCart({{ product.id }})" class="btn btn-accent btn-full">
+              <i class="fas fa-cart-plus"></i>
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Testimonials Section -->
+<section class="section" style="background: var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-subtitle">Real reviews from real customers</p>
+    </div>
+
+    <div class="grid grid-3">
+      {% for testimonial in testimonials %}
+      <div class="card animate-on-scroll">
+        <div class="card-body">
+          <div class="product-rating mb-2">
+            <div class="stars">
+              {% for i in range(testimonial.rating) %}
+                <i class="fas fa-star"></i>
+              {% endfor %}
+            </div>
+          </div>
+
+          <p style="color: var(--text-secondary); margin-bottom: 20px; line-height: 1.8;">
+            "{{ testimonial.comment }}"
+          </p>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="user-avatar">{{ testimonial.avatar }}</div>
+            <div>
+              <p style="font-weight: 600; margin-bottom: 2px;">{{ testimonial.name }}</p>
+              <p style="font-size: 13px; color: var(--text-muted);">{{ testimonial.date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Features/Benefits Section -->
+<section class="section">
+  <div class="container">
+    <div class="grid grid-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <div style="font-size: 48px; color: var(--primary); margin-bottom: 16px;">
+            <i class="fas fa-shipping-fast"></i>
+          </div>
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Free Shipping</h3>
+          <p style="color: var(--text-secondary); font-size: 14px;">On orders above ₹500</p>
+        </div>
+      </div>
+
+      <div class="card text-center">
+        <div class="card-body">
+          <div style="font-size: 48px; color: var(--success); margin-bottom: 16px;">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Secure Payment</h3>
+          <p style="color: var(--text-secondary); font-size: 14px;">100% secure transactions</p>
+        </div>
+      </div>
+
+      <div class="card text-center">
+        <div class="card-body">
+          <div style="font-size: 48px; color: var(--accent); margin-bottom: 16px;">
+            <i class="fas fa-undo-alt"></i>
+          </div>
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Easy Returns</h3>
+          <p style="color: var(--text-secondary); font-size: 14px;">30-day return policy</p>
+        </div>
+      </div>
+
+      <div class="card text-center">
+        <div class="card-body">
+          <div style="font-size: 48px; color: var(--info); margin-bottom: 16px;">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">24/7 Support</h3>
+          <p style="color: var(--text-secondary); font-size: 14px;">Always here to help</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

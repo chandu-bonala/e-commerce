@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ShopNest - Your One-Stop E-Commerce Store{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <!-- Brand Logo -->
+        <a href="{{ url_for('main.index') }}" class="navbar-brand">
+          <i class="fas fa-shopping-bag"></i>
+          ShopNest
+        </a>
+
+        <!-- Search Bar -->
+        <div class="navbar-search">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-input" class="search-input" placeholder="Search for products...">
+        </div>
+
+        <!-- Navigation Actions -->
+        <div class="navbar-actions">
+          {% if current_user.is_authenticated %}
+            <!-- Cart Icon -->
+            <a href="{{ url_for('cart.view') }}" class="nav-icon-btn">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="badge cart-badge" style="display: {{ 'flex' if cart_count > 0 else 'none' }}">{{ cart_count }}</span>
+            </a>
+
+            <!-- User Menu -->
+            <div class="user-menu">
+              <div class="user-avatar">{{ current_user.name[:2].upper() }}</div>
+            </div>
+          {% else %}
+            <!-- Login/Register Buttons -->
+            <a href="{{ url_for('auth.login') }}" class="btn btn-ghost btn-sm">
+              <i class="fas fa-sign-in-alt"></i>
+              Login
+            </a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">
+              <i class="fas fa-user-plus"></i>
+              Sign Up
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div data-flash="{{ category }}" style="display:none;">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Section -->
+        <div>
+          <div class="footer-brand">
+            <i class="fas fa-shopping-bag"></i>
+            ShopNest
+          </div>
+          <p class="footer-description">
+            Your trusted online marketplace for quality products at the best prices. Shop with confidence and enjoy fast, reliable delivery.
+          </p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#" class="nav-icon-btn">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="nav-icon-btn">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="nav-icon-btn">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="nav-icon-btn">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Shop Links -->
+        <div>
+          <h3 class="footer-title">Shop</h3>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('products.list') }}">All Products</a></li>
+            <li><a href="{{ url_for('products.list', category=1) }}">Electronics</a></li>
+            <li><a href="{{ url_for('products.list', category=2) }}">Fashion</a></li>
+            <li><a href="{{ url_for('products.list', category=3) }}">Home & Living</a></li>
+            <li><a href="{{ url_for('products.list', sort='deal') }}">Deals</a></li>
+          </ul>
+        </div>
+
+        <!-- Customer Service -->
+        <div>
+          <h3 class="footer-title">Customer Service</h3>
+          <ul class="footer-links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Track Order</a></li>
+            <li><a href="#">Returns & Refunds</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h3 class="footer-title">Company</h3>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('main.about') }}">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 ShopNest. All rights reserved. | Built with Flask & Python</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Custom JavaScript -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

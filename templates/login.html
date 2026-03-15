@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section">
+  <div class="container" style="max-width: 1000px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+      <!-- Left Side - Branding -->
+      <div>
+        <h1 style="font-size: 40px; font-weight: 700; margin-bottom: 16px; color: var(--primary);">
+          Welcome Back!
+        </h1>
+        <p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 32px;">
+          Login to access your account and continue shopping
+        </p>
+
+        <div style="background: var(--bg-secondary); padding: 32px; border-radius: var(--radius-lg);">
+          <ul style="list-style: none;">
+            <li style="display: flex; align-items: start; gap: 12px; margin-bottom: 20px;">
+              <i class="fas fa-check-circle" style="color: var(--success); font-size: 24px; flex-shrink: 0;"></i>
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 4px;">Track Your Orders</h3>
+                <p style="color: var(--text-secondary); font-size: 14px;">Stay updated on your order status</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: start; gap: 12px; margin-bottom: 20px;">
+              <i class="fas fa-check-circle" style="color: var(--success); font-size: 24px; flex-shrink: 0;"></i>
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 4px;">Faster Checkout</h3>
+                <p style="color: var(--text-secondary); font-size: 14px;">Save addresses for quick ordering</p>
+              </div>
+            </li>
+            <li style="display: flex; align-items: start; gap: 12px;">
+              <i class="fas fa-check-circle" style="color: var(--success); font-size: 24px; flex-shrink: 0;"></i>
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 4px;">Exclusive Deals</h3>
+                <p style="color: var(--text-secondary); font-size: 14px;">Get access to member-only offers</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Side - Login Form -->
+      <div class="card">
+        <div class="card-body" style="padding: 40px;">
+          <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 24px;">Login</h2>
+
+          <form method="POST" action="{{ url_for('auth.login') }}">
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <div style="position: relative;">
+                <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="email" name="email" class="form-control" style="padding-left: 44px;" placeholder="your@email.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <div style="position: relative;">
+                <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="password" name="password" class="form-control" style="padding-left: 44px;" placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="checkbox" name="remember" style="margin-right: 8px;">
+                <span style="font-size: 14px;">Remember me</span>
+              </label>
+              <a href="#" style="font-size: 14px; color: var(--primary); font-weight: 600;">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-full">
+              <i class="fas fa-sign-in-alt"></i>
+              Login
+            </button>
+
+            <div style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
+              Don't have an account?
+              <a href="{{ url_for('auth.register') }}" style="color: var(--primary); font-weight: 600;">Sign Up</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

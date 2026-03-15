@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section" style="background: var(--bg-secondary); min-height: 100vh;">
+  <div class="container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 32px;">
+      <i class="fas fa-tachometer-alt" style="color: var(--primary);"></i>
+      Admin Dashboard
+    </h1>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-4" style="margin-bottom: 32px;">
+      <div class="card">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">Total Products</p>
+              <p style="font-size: 32px; font-weight: 700; color: var(--primary);">{{ total_products }}</p>
+            </div>
+            <div style="width: 60px; height: 60px; background: rgba(37, 99, 235, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-box" style="font-size: 28px; color: var(--primary);"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">Total Orders</p>
+              <p style="font-size: 32px; font-weight: 700; color: var(--success);">{{ total_orders }}</p>
+            </div>
+            <div style="width: 60px; height: 60px; background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-shopping-cart" style="font-size: 28px; color: var(--success);"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">Total Revenue</p>
+              <p style="font-size: 32px; font-weight: 700; color: var(--accent);">₹{{ "%.2f"|format(total_revenue) }}</p>
+            </div>
+            <div style="width: 60px; height: 60px; background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-dollar-sign" style="font-size: 28px; color: var(--accent);"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">Total Customers</p>
+              <p style="font-size: 32px; font-weight: 700; color: var(--info);">{{ total_users }}</p>
+            </div>
+            <div style="width: 60px; height: 60px; background: rgba(59, 130, 246, 0.1); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-users" style="font-size: 28px; color: var(--info);"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 32px; margin-bottom: 32px;">
+      <!-- Recent Orders -->
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Recent Orders</span>
+          <a href="{{ url_for('admin.orders') }}" class="btn btn-sm btn-ghost">View All</a>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in recent_orders %}
+              <tr>
+                <td>
+                  <a href="{{ url_for('orders.detail', order_id=order.id) }}" style="color: var(--primary); font-weight: 600;">
+                    {{ order.order_number }}
+                  </a>
+                </td>
+                <td>{{ order.user.name }}</td>
+                <td style="font-weight: 600;">₹{{ order.total_price }}</td>
+                <td>
+                  {% if order.order_status == 'delivered' %}
+                  <span style="background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600;">
+                    {{ order.order_status|upper }}
+                  </span>
+                  {% elif order.order_status == 'cancelled' %}
+                  <span style="background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600;">
+                    {{ order.order_status|upper }}
+                  </span>
+                  {% elif order.order_status == 'shipped' %}
+                  <span style="background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600;">
+                    {{ order.order_status|upper }}
+                  </span>
+                  {% else %}
+                  <span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600;">
+                    {{ order.order_status|upper }}
+                  </span>
+                  {% endif %}
+                </td>
+                <td style="color: var(--text-secondary); font-size: 14px;">{{ order.created_at.strftime('%b %d, %Y') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Order Status Breakdown -->
+      <div class="card">
+        <div class="card-header">Order Status</div>
+        <div class="card-body">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 14px;">Pending</span>
+                <span style="font-weight: 600;">{{ status_counts.get('pending', 0) }}</span>
+              </div>
+              <div style="background: var(--border-light); height: 8px; border-radius: var(--radius-full); overflow: hidden;">
+                <div style="background: var(--warning); height: 100%; width: {{ (status_counts.get('pending', 0) / total_orders * 100) if total_orders > 0 else 0 }}%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 14px;">Confirmed</span>
+                <span style="font-weight: 600;">{{ status_counts.get('confirmed', 0) }}</span>
+              </div>
+              <div style="background: var(--border-light); height: 8px; border-radius: var(--radius-full); overflow: hidden;">
+                <div style="background: var(--info); height: 100%; width: {{ (status_counts.get('confirmed', 0) / total_orders * 100) if total_orders > 0 else 0 }}%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 14px;">Shipped</span>
+                <span style="font-weight: 600;">{{ status_counts.get('shipped', 0) }}</span>
+              </div>
+              <div style="background: var(--border-light); height: 8px; border-radius: var(--radius-full); overflow: hidden;">
+                <div style="background: var(--primary); height: 100%; width: {{ (status_counts.get('shipped', 0) / total_orders * 100) if total_orders > 0 else 0 }}%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 14px;">Delivered</span>
+                <span style="font-weight: 600;">{{ status_counts.get('delivered', 0) }}</span>
+              </div>
+              <div style="background: var(--border-light); height: 8px; border-radius: var(--radius-full); overflow: hidden;">
+                <div style="background: var(--success); height: 100%; width: {{ (status_counts.get('delivered', 0) / total_orders * 100) if total_orders > 0 else 0 }}%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions & Top Products -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-header">Quick Actions</div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <a href="{{ url_for('admin.add_product') }}" class="btn btn-primary">
+              <i class="fas fa-plus"></i>
+              Add Product
+            </a>
+            <a href="{{ url_for('admin.products') }}" class="btn btn-outline">
+              <i class="fas fa-box"></i>
+              Manage Products
+            </a>
+            <a href="{{ url_for('admin.orders') }}" class="btn btn-outline">
+              <i class="fas fa-shopping-cart"></i>
+              View Orders
+            </a>
+            <a href="{{ url_for('admin.categories') }}" class="btn btn-outline">
+              <i class="fas fa-tags"></i>
+              Categories
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Selling Products -->
+      <div class="card">
+        <div class="card-header">Top Selling Products</div>
+        <div class="card-body">
+          {% if top_products %}
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for product, sold in top_products %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="{{ product.image or '/static/images/placeholder.jpg' }}"
+                     alt="{{ product.name }}"
+                     style="width: 40px; height: 40px; object-fit: cover; border-radius: var(--radius-md);">
+                <div>
+                  <p style="font-weight: 600; font-size: 14px;">{{ product.name[:30] }}...</p>
+                  <p style="color: var(--text-secondary); font-size: 12px;">{{ sold }} sold</p>
+                </div>
+              </div>
+              <p style="font-weight: 700; color: var(--primary);">₹{{ product.final_price }}</p>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p style="text-align: center; color: var(--text-secondary);">No sales data yet</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

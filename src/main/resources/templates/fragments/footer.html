@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">
+                    <i class="fas fa-shopping-bag"></i> ShopNest
+                </div>
+                <p class="footer-description">
+                    Your trusted online marketplace for quality products at the best prices. Shop with confidence and enjoy fast, reliable delivery.
+                </p>
+                <div style="display:flex;gap:12px;margin-top:20px;">
+                    <a href="#" class="nav-icon-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="nav-icon-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="nav-icon-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="nav-icon-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3 class="footer-title">Shop</h3>
+                <ul class="footer-links">
+                    <li><a href="/products">All Products</a></li>
+                    <li><a href="/products?category=1">Electronics</a></li>
+                    <li><a href="/products?category=2">Fashion</a></li>
+                    <li><a href="/products?category=3">Home &amp; Living</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Customer Service</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Returns &amp; Refunds</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Company</h3>
+                <ul class="footer-links">
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ShopNest. All rights reserved. | Built with Spring Boot &amp; Thymeleaf</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

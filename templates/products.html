@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Products - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section">
+  <div class="container">
+    <div style="display: flex; gap: 32px;">
+      <!-- Sidebar Filters -->
+      <aside style="width: 280px; flex-shrink: 0;">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-filter"></i>
+            Filters
+          </div>
+          <div class="card-body">
+            <form id="filter-form" method="GET" action="{{ url_for('products.list') }}">
+              <!-- Categories -->
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                {% for category in categories %}
+                <div style="margin-bottom: 8px;">
+                  <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="category" value="{{ category.id }}"
+                           {% if current_category == category.id %}checked{% endif %}
+                           style="margin-right: 8px;">
+                    {{ category.name }}
+                  </label>
+                </div>
+                {% endfor %}
+                <div style="margin-top: 8px;">
+                  <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="category" value=""
+                           {% if not current_category %}checked{% endif %}
+                           style="margin-right: 8px;">
+                    All Categories
+                  </label>
+                </div>
+              </div>
+
+              <!-- Price Range -->
+              <div class="form-group">
+                <label class="form-label">Price Range</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="number" name="min_price" placeholder="Min" class="form-control"
+                         value="{{ request.args.get('min_price', '') }}">
+                  <span>-</span>
+                  <input type="number" name="max_price" placeholder="Max" class="form-control"
+                         value="{{ request.args.get('max_price', '') }}">
+                </div>
+              </div>
+
+              <!-- Sort By -->
+              <div class="form-group">
+                <label class="form-label">Sort By</label>
+                <select name="sort" class="form-control">
+                  <option value="latest" {% if current_sort == 'latest' %}selected{% endif %}>Latest</option>
+                  <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                  <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                  <option value="rating" {% if current_sort == 'rating' %}selected{% endif %}>Top Rated</option>
+                  <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name (A-Z)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-search"></i>
+                Apply Filters
+              </button>
+            </form>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Products Grid -->
+      <div style="flex: 1;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div>
+            <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">Products</h1>
+            <p style="color: var(--text-secondary);">Showing {{ products|length }} products</p>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        {% if products %}
+        <div class="grid grid-3">
+          {% for product in products %}
+          <div class="product-card">
+            <a href="{{ url_for('products.detail', product_id=product.id) }}">
+              <div class="product-image">
+                {% if product.discount_percentage > 0 %}
+                <span class="product-badge sale">{{ product.discount_percentage }}% OFF</span>
+                {% elif product.is_featured %}
+                <span class="product-badge">Featured</span>
+                {% endif %}
+                <img src="{{ product.image or '/static/images/placeholder.jpg' }}" alt="{{ product.name }}">
+              </div>
+            </a>
+
+            <div class="product-info">
+              <p class="product-category">{{ product.category.name }}</p>
+              <h3 class="product-name">
+                <a href="{{ url_for('products.detail', product_id=product.id) }}">{{ product.name }}</a>
+              </h3>
+
+              <div class="product-rating">
+                <div class="stars">
+                  {% for i in range(5) %}
+                    {% if i < product.rating %}
+                      <i class="fas fa-star"></i>
+                    {% else %}
+                      <i class="far fa-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <span class="rating-text">({{ product.reviews_count }})</span>
+              </div>
+
+              <div class="product-price">
+                <span class="current-price">₹{{ product.final_price }}</span>
+                {% if product.discount_price %}
+                <span class="original-price">₹{{ product.price }}</span>
+                {% endif %}
+              </div>
+
+              <div class="product-actions">
+                {% if current_user.is_authenticated %}
+                <button onclick="addToCart({{ product.id }})" class="btn btn-primary btn-full">
+                  <i class="fas fa-cart-plus"></i>
+                  Add to Cart
+                </button>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-full">
+                  <i class="fas fa-sign-in-alt"></i>
+                  Login to Buy
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination.pages > 1 %}
+        <div style="display: flex; justify-content: center; margin-top: 48px; gap: 8px;">
+          {% if pagination.has_prev %}
+          <a href="{{ url_for('products.list', page=pagination.prev_num) }}" class="btn btn-ghost">
+            <i class="fas fa-chevron-left"></i>
+            Previous
+          </a>
+          {% endif %}
+
+          {% for page_num in pagination.iter_pages() %}
+            {% if page_num %}
+              {% if page_num == pagination.page %}
+                <button class="btn btn-primary" disabled>{{ page_num }}</button>
+              {% else %}
+                <a href="{{ url_for('products.list', page=page_num) }}" class="btn btn-ghost">{{ page_num }}</a>
+              {% endif %}
+            {% else %}
+              <span class="btn btn-ghost" disabled>...</span>
+            {% endif %}
+          {% endfor %}
+
+          {% if pagination.has_next %}
+          <a href="{{ url_for('products.list', page=pagination.next_num) }}" class="btn btn-ghost">
+            Next
+            <i class="fas fa-chevron-right"></i>
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div style="text-align: center; padding: 80px 20px;">
+          <i class="fas fa-box-open" style="font-size: 64px; color: var(--text-muted); margin-bottom: 16px;"></i>
+          <h3 style="font-size: 24px; margin-bottom: 8px;">No Products Found</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 24px;">Try adjusting your filters or search query</p>
+          <a href="{{ url_for('products.list') }}" class="btn btn-primary">
+            <i class="fas fa-redo"></i>
+            Clear Filters
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

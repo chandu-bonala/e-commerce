@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section">
+  <div class="container" style="max-width: 600px;">
+    <div class="card">
+      <div class="card-body" style="padding: 40px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">Create Account</h1>
+          <p style="color: var(--text-secondary);">Join ShopNest today and start shopping!</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.register') }}">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <div style="position: relative;">
+              <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+              <input type="text" name="name" class="form-control" style="padding-left: 44px;" placeholder="John Doe" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div style="position: relative;">
+              <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+              <input type="email" name="email" class="form-control" style="padding-left: 44px;" placeholder="your@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div style="position: relative;">
+              <i class="fas fa-phone" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+              <input type="tel" name="phone" class="form-control" style="padding-left: 44px;" placeholder="+91 1234567890">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div style="position: relative;">
+              <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+              <input type="password" name="password" id="password" class="form-control" style="padding-left: 44px;" placeholder="••••••••" required>
+            </div>
+            <div class="form-text">
+              Password strength: <span id="password-strength" style="font-weight: 600;"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <div style="position: relative;">
+              <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+              <input type="password" name="confirm_password" class="form-control" style="padding-left: 44px;" placeholder="••••••••" required>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <label style="display: flex; align-items: start; cursor: pointer;">
+              <input type="checkbox" required style="margin-right: 8px; margin-top: 4px;">
+              <span style="font-size: 14px; color: var(--text-secondary);">
+                I agree to the <a href="#" style="color: var(--primary); font-weight: 600;">Terms of Service</a> and
+                <a href="#" style="color: var(--primary); font-weight: 600;">Privacy Policy</a>
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-full">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+          </button>
+
+          <div style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}" style="color: var(--primary); font-weight: 600;">Login</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

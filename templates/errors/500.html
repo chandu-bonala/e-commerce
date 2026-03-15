@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}500 - Server Error - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section" style="min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+  <div class="container" style="max-width: 600px; text-align: center;">
+    <div style="font-size: 120px; font-weight: 700; color: var(--danger); margin-bottom: 24px;">
+      500
+    </div>
+    <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 16px;">Internal Server Error</h1>
+    <p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 32px;">
+      Something went wrong on our end. We're working to fix it. Please try again later.
+    </p>
+
+    <div style="display: flex; gap: 16px; justify-content: center;">
+      <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-home"></i>
+        Go Home
+      </a>
+      <button onclick="location.reload()" class="btn btn-outline btn-lg">
+        <i class="fas fa-redo"></i>
+        Refresh Page
+      </button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - ShopNest{% endblock %}
+
+{% block content %}
+
+<div class="section">
+  <div class="container" style="max-width: 900px;">
+    <div class="text-center" style="margin-bottom: 64px;">
+      <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 16px;">About ShopNest</h1>
+      <p style="font-size: 20px; color: var(--text-secondary);">Your trusted online shopping destination</p>
+    </div>
+
+    <div class="card" style="margin-bottom: 48px;">
+      <div class="card-body" style="padding: 48px;">
+        <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 24px; color: var(--primary);">Our Story</h2>
+        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px;">
+          ShopNest was founded with a simple mission: to make online shopping easy, enjoyable, and accessible to everyone.
+          We believe that quality products should be available at fair prices, delivered with exceptional service.
+        </p>
+        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px;">
+          What started as a small e-commerce platform has grown into a trusted marketplace serving thousands of satisfied customers.
+          We carefully curate our product selection to ensure quality, value, and variety across all categories.
+        </p>
+        <p style="color: var(--text-secondary); line-height: 1.8;">
+          Our commitment to customer satisfaction drives everything we do. From secure payment processing to fast delivery
+          and hassle-free returns, we're here to make your shopping experience exceptional.
+        </p>
+      </div>
+    </div>
+
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 32px; text-align: center;">Why Choose ShopNest?</h2>
+
+    <div class="grid grid-2" style="gap: 32px; margin-bottom: 48px;">
+      <div class="card">
+        <div class="card-body" style="text-align: center; padding: 40px;">
+          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius-full); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-shield-alt" style="font-size: 36px; color: white;"></i>
+          </div>
+          <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;">Quality Assured</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            Every product is carefully inspected and verified before shipping to ensure you receive only the best quality.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="text-align: center; padding: 40px;">
+          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--success), #059669); border-radius: var(--radius-full); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-shipping-fast" style="font-size: 36px; color: white;"></i>
+          </div>
+          <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;">Fast Delivery</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            Quick and reliable shipping ensures your orders arrive on time. Free shipping available on orders above ₹500.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="text-align: center; padding: 40px;">
+          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); border-radius: var(--radius-full); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-tags" style="font-size: 36px; color: white;"></i>
+          </div>
+          <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;">Best Prices</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            We offer competitive prices and regular deals to ensure you get the best value for your money.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="text-align: center; padding: 40px;">
+          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--info), #1e40af); border-radius: var(--radius-full); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-headset" style="font-size: 36px; color: white;"></i>
+          </div>
+          <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;">24/7 Support</h3>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            Our dedicated customer support team is always ready to help you with any questions or concerns.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="{{ url_for('products.list') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-shopping-bag"></i>
+        Start Shopping
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
